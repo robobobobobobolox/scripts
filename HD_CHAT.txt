@@ -1,0 +1,130 @@
+local player = game.Players.LocalPlayer
+local backpack = player:WaitForChild("Backpack")
+local mouse = player:GetMouse()
+local event = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+
+local function message(msg)
+	event:FireServer("[HD_CHAT] "..msg, "All")
+end
+
+local function getcmd(msg)
+	return string.split(msg, " ")[1]
+end
+
+local function getarg(msg, arg)
+	return string.split(msg, " ")[arg]
+end
+
+message('| A simple "admin" system made for ROBLOX chat and to be executed with a client side executor. | System messages can be viewed by anyone. | Made by cheesecake. | !help for cmds. |')
+
+local prefix = "!"
+
+local audio = Instance.new("Sound", workspace)
+audio.Looped = true
+
+local backshotting = false
+
+local a
+
+game.Players.LocalPlayer.Chatted:Connect(function(msg)
+	local char = player.Character
+	local hum = char:FindFirstChildOfClass("Humanoid") or char:WaitForChild("Humanoid")
+	wait(0.5)
+	if getcmd(msg) then
+		if getcmd(msg) == prefix.."help" then
+			message("Commands: "..prefix.."help | "..prefix.."music (id) | "..prefix.."volume (number) | "..prefix.." rejoin | "..prefix.."localkick (plrname) | "..prefix.."btools | "..prefix.."shoot_back (plrname or stop) | !explode")
+		elseif getcmd(msg) == prefix.."prefix" then
+			prefix = getarg(msg, 2)
+			message("Prefix changed to "..getarg(msg, 2))
+		elseif getcmd(msg) == prefix.."music" then
+			audio.SoundId = "rbxassetid://"..getarg(msg, 2)
+			audio:Play()
+			message("Music ID set to "..getarg(msg, 2))
+		elseif getcmd(msg) == prefix.."volume" then
+			audio.Volume = tonumber(getarg(msg, 2))
+			message("Music volume set to "..getarg(msg, 2))
+		elseif getcmd(msg) == prefix.."rejoin" then
+			message("Rejoin will begin in 5 seconds. Please re-execute the script if it does not work after rejoining.")
+			wait(5)
+			game:GetService("TeleportService"):Teleport(game.PlaceId)
+		elseif getcmd(msg) == prefix.."localkick" then
+			local plr = game.Players:FindFirstChild(getarg(msg, 2))
+			if plr then
+				message("Attempting to destroy player instance and destroy character...")
+				local success, info = pcall(function()
+					plr.Character:BreakJoints()
+					plr:Destroy()
+				end)
+				if success then
+					message("Successfully localkicked player.")
+				else
+					message("Localkick failed. Info variable from pcall function: "..tostring(info))
+				end
+			end
+		elseif getcmd(msg) == prefix.."btools" then
+			local backpack = game:GetService("Players").LocalPlayer.Backpack
+
+			local hammer = Instance.new("HopperBin")
+			hammer.Name = "Hammer"
+			hammer.BinType = 4
+			hammer.Parent = backpack
+
+			local cloneTool = Instance.new("HopperBin")
+			cloneTool.Name = "Clone"
+			cloneTool.BinType = 3
+			cloneTool.Parent = backpack
+
+			local grabTool = Instance.new("HopperBin")
+			grabTool.Name = "Grab"
+			grabTool.BinType = 2
+			grabTool.Parent = backpack
+
+			local buildTool = Instance.new("Tool")
+			buildTool.Name = "create part"
+			buildTool.RequiresHandle = false
+			buildTool.Parent = backpack
+
+			buildTool.Activated:Connect(function()
+				if mouse.Hit then
+					local pos = mouse.Hit.Position
+
+					local part = Instance.new("Part")
+					part.Size = Vector3.new(4, 4, 4)
+					part.Anchored = true
+					part.Position = pos
+					part.Parent = workspace
+				end
+			end)
+		elseif getcmd(msg) == prefix.."shoot_back" then
+			backshotting = not backshotting
+			local players = game.Players:GetPlayers()
+			local randomPlayer = players[math.random(1, #players)]
+			if getarg(msg, 2) == "stop" then
+				message("Stopped b4ck__sh0t.")
+				backshotting = false
+				if char:FindFirstChild("ManualWeld") then char:FindFirstChild("ManualWeld"):Destroy() end
+				a:Stop()
+				return
+			end
+			local target = workspace:FindFirstChild(getarg(msg, 2)) or randomPlayer.Character
+			if target then
+				message("WARNING: This is against Korone's TOS. Don't use near mods. Or just don't use this next to anyone like a dumbass.")
+				local hrp = target:WaitForChild("HumanoidRootPart")
+				local animation = Instance.new("Animation")
+				animation.AnimationId = "rbxassetid://148840371"
+				local animator = hum:WaitForChild("Animator")
+				a = animator:LoadAnimation(animation)
+				char:SetPrimaryPartCFrame(hrp.CFrame)
+				a:Play()
+				a:AdjustSpeed(1.5)
+				local weld = Instance.new("ManualWeld")
+				weld.Parent = char
+				weld.Part0 = char:WaitForChild("HumanoidRootPart")
+				weld.Part1 = hrp
+			end
+		elseif getcmd(msg) == prefix.."explode" then
+			local exp = Instance.new("Explosion", char)
+			exp.Position = char:WaitForChild("HumanoidRootPart").Position
+		end
+	end
+end)
