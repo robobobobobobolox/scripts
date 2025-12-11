@@ -37,7 +37,7 @@ player.Chatted:Connect(function(msg)
 
 	if getcmd(msg) then
 		if getcmd(msg) == prefix.."help" then
-			message("Commands: "..prefix.."help | "..prefix.."music (id) | "..prefix.."volume (number) | "..prefix.."rejoin | "..prefix.."localkick (plrname) | "..prefix.."btools | "..prefix.."shoot_back (plrname or stop) | !explode | "..prefix.."quickrejoin | "..prefix.."fly")
+			message("Commands: "..prefix.."help | "..prefix.."music (id) | "..prefix.."volume (number) | "..prefix.."rejoin | "..prefix.."localkick (plrname) | "..prefix.."btools | "..prefix.."shoot_back (plrname or stop) | !explode | "..prefix.."quickrejoin | "..prefix.."fly | "..prefix.."speed (number)")
 
 		elseif getcmd(msg) == prefix.."prefix" then
 			prefix = getarg(msg, 2)
@@ -74,6 +74,7 @@ player.Chatted:Connect(function(msg)
 			end
 
 		elseif getcmd(msg) == prefix.."btools" then
+			message("BTools given. Only you can see your builds.")
 			local backpack = player.Backpack
 
 			local hammer = Instance.new("HopperBin")
@@ -355,6 +356,15 @@ player.Chatted:Connect(function(msg)
 					end
 				end)
 			end
+		elseif getcmd(msg) == prefix.."speed" then
+			message("Speed changed to "..getarg(msg, 2))
+			local speed = tonumber(getarg(msg, 2))
+			hum.WalkSpeed = speed
+		elseif getcmd(msg) == prefix.."jumppower" then
+			message("Jump power changed to "..getarg(msg, 2).." (Humanoid.UseJumpPower is set to true.)")
+			local speed = tonumber(getarg(msg, 2))
+			hum.UseJumpPower = true
+			hum.JumpPower = speed
 		end
 	end
 end)
