@@ -1,0 +1,19 @@
+local a = Instance.new("Tool")
+a.Name = "deleter"
+
+local b = Instance.new("Part")
+b.Name = "Handle"
+b.Size = Vector3.new(1,1,1)
+b.Anchored = false
+b.CanCollide = true
+b.Parent = a
+
+a.Equipped:Connect(function()
+    b.Touched:Connect(function(hit)
+        if hit.Parent ~= a.Parent and hit.Name ~= "Baseplate" then
+            hit:Destroy()
+        end
+    end)
+end)
+
+a.Parent = game.Players.LocalPlayer.Backpack
