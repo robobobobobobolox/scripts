@@ -15,7 +15,7 @@ local function getarg(msg, arg)
 	return string.split(msg, " ")[arg]
 end
 
-message('| A simple "admin" system made for ROBLOX chat, to be executed with a client side executor. | System messages can be viewed by anyone. | Commands will still work if your chat gets rate limited. | Made by cheesecake. | !help for cmds. |')
+message('| A simple "admin" system made for ROBLOX chat, to be executed with a client side executor. | System messages can be viewed by anyone. | Made by cheesecake. | !help for cmds. |')
 
 local prefix = "!"
 
@@ -103,7 +103,7 @@ player.Chatted:Connect(function(msg)
 					part.Parent = workspace
 				end
 			end)
-			
+
 			local buildTool2 = Instance.new("Tool")
 			buildTool2.Name = "create part unanchored"
 			buildTool2.RequiresHandle = false
@@ -233,9 +233,9 @@ player.Chatted:Connect(function(msg)
 						hum:SetStateEnabled(Enum.HumanoidStateType.Swimming,false)
 						hum:ChangeState(Enum.HumanoidStateType.Swimming)
 					end
-					
+
 					if game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid").RigType == Enum.HumanoidRigType.R6 then
-						
+
 						local plr = game.Players.LocalPlayer
 						local torso = plr.Character.Torso
 						local flying = true
@@ -244,7 +244,7 @@ player.Chatted:Connect(function(msg)
 						local lastctrl = {f = 0, b = 0, l = 0, r = 0}
 						local maxspeed = 50
 						local speed = 0
-						
+
 						local bg = Instance.new("BodyGyro", torso)
 						bg.P = 9e4
 						bg.maxTorque = Vector3.new(9e9, 9e9, 9e9)
@@ -288,7 +288,7 @@ player.Chatted:Connect(function(msg)
 						plr.Character.Humanoid.PlatformStand = false
 						game.Players.LocalPlayer.Character.Animate.Disabled = false
 						tpwalking = false
-						
+
 					else
 						local plr = game.Players.LocalPlayer
 						local UpperTorso = plr.Character.UpperTorso
@@ -298,7 +298,7 @@ player.Chatted:Connect(function(msg)
 						local lastctrl = {f = 0, b = 0, l = 0, r = 0}
 						local maxspeed = 50
 						local speed = 0
-						
+
 						local bg = Instance.new("BodyGyro", UpperTorso)
 						bg.P = 9e4
 						bg.maxTorque = Vector3.new(9e9, 9e9, 9e9)
