@@ -27,7 +27,7 @@ local a
 
 local nowe = false
 
-game.Players.LocalPlayer.Chatted:Connect(function(msg)
+player.Chatted:Connect(function(msg)
 	local char = player.Character
 	local hum = char:FindFirstChildOfClass("Humanoid") or char:WaitForChild("Humanoid")
 	wait(0.5)
