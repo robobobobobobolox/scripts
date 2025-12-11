@@ -106,7 +106,7 @@ game.Players.LocalPlayer.Chatted:Connect(function(msg)
 				a:Stop()
 				return
 			end
-			local target1 = game.Players:FindFirstChild(getarg(msg, 2)) and or randomPlayer
+			local target1 = game.Players:FindFirstChild(getarg(msg, 2)) or randomPlayer
 local target = target1.Character or target1.CharacterAdded:Wait()
 			if target then
 				message("WARNING: This is against Korone's TOS. Don't use near mods. Or just don't use this next to anyone like a dumbass.")
