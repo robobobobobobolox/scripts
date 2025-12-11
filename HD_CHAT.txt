@@ -2,6 +2,7 @@ local player = game.Players.LocalPlayer
 local backpack = player:WaitForChild("Backpack")
 local mouse = player:GetMouse()
 local event = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+local rs = game:GetService("RunService")
 
 local function message(msg)
 	event:FireServer("[HD_CHAT] "..msg, "All")
@@ -27,6 +28,8 @@ local a
 
 local nowe = false
 
+local con
+
 local animation = Instance.new("Animation")
 animation.AnimationId = "rbxassetid://148840371"
 
@@ -37,7 +40,7 @@ player.Chatted:Connect(function(msg)
 
 	if getcmd(msg) then
 		if getcmd(msg) == prefix.."help" then
-			message("Commands: "..prefix.."help | "..prefix.."music (id) | "..prefix.."volume (number) | "..prefix.."rejoin | "..prefix.."localkick (plrname) | "..prefix.."btools | "..prefix.."shoot_back (plrname or stop) | !explode | "..prefix.."quickrejoin | "..prefix.."fly | "..prefix.."speed (number)")
+			message("Commands: "..prefix.."help | "..prefix.."music (id) | "..prefix.."volume (number) | "..prefix.."rejoin | "..prefix.."localkick (plrname) | "..prefix.."btools | "..prefix.."shoot_back (plrname or stop) | !explode | "..prefix.."quickrejoin | "..prefix.."fly | "..prefix.."speed (number) | "..prefix.."tp (plrname)")
 
 		elseif getcmd(msg) == prefix.."prefix" then
 			prefix = getarg(msg, 2)
@@ -127,12 +130,12 @@ player.Chatted:Connect(function(msg)
 		elseif getcmd(msg) == prefix.."shoot_back" then
 			local players = game.Players:GetPlayers()
 			local randomPlayer = players[math.random(1, #players)]
-			
+
 			if randomPlayer.Name == player.Name then
 				repeat randomPlayer = players[math.random(1, #players)] until randomPlayer.Name ~= player.Name
 			end
 
-			if getarg(msg, 2) == "stop" then
+			if getarg(msg, 2) == "stop" or getarg(msg, 2) == nil then
 				message("Stopped b4ck__sh0t.")
 				backshotting = false
 
@@ -164,12 +167,11 @@ player.Chatted:Connect(function(msg)
 				char:SetPrimaryPartCFrame(hrp.CFrame)
 				a:Play()
 				a:AdjustSpeed(3)
-
-				local weld = Instance.new("ManualWeld")
-				weld.C0 = CFrame.new(0, 0, -1)
-				weld.Parent = char
-				weld.Part0 = char:WaitForChild("HumanoidRootPart")
-				weld.Part1 = hrp
+				
+				while backshotting and hrp do
+					char:SetPrimaryPartCFrame(hrp.CFrame + Vector3.new(0, 2, 0))
+					rs.Heartbeat:Wait()
+				end
 			end
 
 		elseif getcmd(msg) == prefix.."explode" then
@@ -365,6 +367,14 @@ player.Chatted:Connect(function(msg)
 			local speed = tonumber(getarg(msg, 2))
 			hum.UseJumpPower = true
 			hum.JumpPower = speed
+		elseif getcmd(msg) == prefix.."tp" then
+			local plr = game.Players:FindFirstChild(getarg(msg, 2))
+			if plr then
+				message("Teleported to "..plr.Name)
+				char:WaitForChild("HumanoidRootPart").CFrame = plr.Character:WaitForChild("HumanoidRootPart").CFrame
+			else
+				message("Player not found.")
+			end
 		end
 	end
 end)
