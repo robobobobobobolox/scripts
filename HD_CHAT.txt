@@ -1,7 +1,24 @@
 local player = game.Players.LocalPlayer
 local backpack = player:WaitForChild("Backpack")
+local rep = game:GetService("ReplicatedStorage")
 local mouse = player:GetMouse()
-local event = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+local event
+
+if rep:FindFirstChild("DefaultChatSystemChatEvents") then
+	event = rep.DefaultChatSystemChatEvents.SayMessageRequest
+else
+	for _, obj in ipairs(rep:GetDescendants()) do
+		if obj.Name == "SayMessageRequest" and obj.Parent:FindFirstChild("OnMuted") then
+			event = obj
+		end
+	end
+end
+
+if event == nil then
+	print("NO rep.DefaultChatSystemChatEvents.SayMessageRequest. SCRIPT CANT RUN!")
+	return
+end
+
 local rs = game:GetService("RunService")
 
 local function message(msg)
@@ -167,7 +184,7 @@ player.Chatted:Connect(function(msg)
 				char:SetPrimaryPartCFrame(hrp.CFrame)
 				a:Play()
 				a:AdjustSpeed(3)
-				
+
 				while backshotting and hrp do
 					char:SetPrimaryPartCFrame(hrp.CFrame + Vector3.new(0, 2, 0))
 					rs.Heartbeat:Wait()
